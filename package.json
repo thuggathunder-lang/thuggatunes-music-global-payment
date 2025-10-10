@@ -1,0 +1,56 @@
+{
+  "name": "thuggatunes-sitenewww",
+  "version": "1.0.0",
+  "description": "ThuggaTunes site & global payment helper",
+  "main": "thuggatunesmusicandglobalpayment.js",
+  "scripts": {
+    "prestart": "node -e \"require('dotenv').config(); require('./lib/envValidator').validateEnv()\"",
+    "start": "node thuggatunesmusicandglobalpayment.js",
+    "test": "jest --runInBand",
+    "lint": "eslint . --ext .js",
+    "format": "prettier --write \"**/*.{js,json,md}\"",
+    "prepare": "husky install",
+    "lint:fix": "eslint . --ext .js --fix",
+    "format:check": "prettier --check \"**/*.{js,json,md}\"",
+    "release": "node -e \"const t=require('child_process'); const a=process.argv[1]||'patch'; t.execSync('npm version '+a+' -m \\\"release: %s\\\"'); t.execSync('git push --follow-tags');\"",
+    "semantic-release": "semantic-release",
+    "make-zip": "node -e \"const arch=require('archiver'); const fs=require('fs'); const output=fs.createWriteStream('release.zip'); const archive=arch('zip'); output.on('close',()=>console.log('Zipped',archive.pointer(),'bytes')); archive.pipe(output); archive.glob('**/*',{ignore:['node_modules/**','.git/**','release.zip']}); archive.finalize();\""
+  },
+  "lint-staged": {
+    "**/*.{js,json,md}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/your-org/thuggatunes-sitenewww.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-org/thuggatunes-sitenewww/issues"
+  },
+  "homepage": "https://github.com/your-org/thuggatunes-sitenewww#readme",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "winston": "^3.18.3",
+    "yargs": "^18.0.0"
+  },
+  "devDependencies": {
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^11.0.6",
+    "@semantic-release/npm": "^12.0.2",
+    "@typescript-eslint/eslint-plugin": "^8.46.0",
+    "@typescript-eslint/parser": "^8.46.0",
+  "archiver": "^5.3.1",
+    "eslint": "^9.37.0",
+    "husky": "^9.1.7",
+    "jest": "^30.2.0",
+    "lint-staged": "^16.2.3",
+    "prettier": "^3.6.2",
+    "semantic-release": "^24.2.9"
+  }
+}
