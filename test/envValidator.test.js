@@ -1,4 +1,4 @@
-const { validateEnv } = require('../lib/envValidator');
+import { validateEnv } from '../lib/envValidator.js';
 
 describe('envValidator', () => {
   const OLD_ENV = process.env;

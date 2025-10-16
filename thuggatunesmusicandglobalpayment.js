@@ -1,9 +1,9 @@
 // Load .env from project root (standard behavior)
-const path = require('path');
-const yargs = require('yargs/yargs');
-const { hideBin } = require('yargs/helpers');
-const logger = require('./lib/logger');
-const { validateEnv } = require('./lib/envValidator');
+import path from 'path';
+import yargs from 'yargs/yargs';
+import { hideBin } from 'yargs/helpers';
+import logger from './lib/logger.js';
+import { validateEnv } from './lib/envValidator.js';
 
 const argv = yargs(hideBin(process.argv))
   .option('env', {

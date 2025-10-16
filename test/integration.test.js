@@ -1,10 +1,13 @@
-const { spawn } = require('child_process');
-const path = require('path');
+import { spawn } from 'child_process';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 function runScript(args = [], env = {}) {
   return new Promise((resolve, _reject) => {
     const script = path.join(__dirname, '..', 'thuggatunesmusicandglobalpayment.js');
-    // If env is empty object, pass process.env; otherwise pass the env object exactly
     const childEnv = Object.keys(env).length ? env : process.env;
     const child = spawn(process.execPath, [script, ...args], { env: childEnv });
     let out = '';
