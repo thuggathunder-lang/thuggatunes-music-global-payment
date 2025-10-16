@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thuggatunes Admin Dashboard</title>
+  <style>
+    body { font-family: 'Poppins', sans-serif; background: #0d1117; color: #fff; margin: 0; padding: 20px; }
+    h1 { text-align: center; color: #00bcd4; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #222; }
+    th { background-color: #161b22; color: #00e6ff; }
+    tr:hover { background-color: #1e232b; }
+    .status-success { color: #00ff6a; font-weight: bold; }
+    .status-pending { color: #ffc107; font-weight: bold; }
+    .refresh-btn { 
+      background: #00bcd4; color: white; padding: 10px 20px; border: none; 
+      border-radius: 5px; cursor: pointer; margin: 20px auto; display: block; 
+    }
+    .refresh-btn:hover { background: #008ba3; }
+  </style>
+</head>
+<body>
+  <h1>💳 Thuggatunes Payment Dashboard</h1>
+  <button class="refresh-btn" onclick="loadTransactions()">🔄 Refresh Data</button>
+  <table id="transactions-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Payment ID</th>
+        <th>Amount (USD)</th>
+        <th>Status</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    async function loadTransactions() {
+      const res = await fetch("http://localhost:5050/transactions");
+      const data = await res.json();
+      const tbody = document.querySelector("#transactions-table tbody");
+      tbody.innerHTML = "";
+
+      if (data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:gray;">No transactions found</td></tr>`;
+        return;
+      }
+
+      data.forEach((tx, index) => {
+        const row = document.createElement("tr");
+        const statusClass = tx.status === "succeeded" ? "status-success" : "status-pending";
+        const date = new Date(tx.createdAt).toLocaleString();
+        row.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${tx.paymentIntentId}</td>
+          <td>$${(tx.amount / 100).toFixed(2)}</td>
+          <td class="${statusClass}">${tx.status}</td>
+          <td>${date}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    // Load data when page opens
+    loadTransactions();
+  </script>
+</body>
+</html>

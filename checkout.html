@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thuggatunes Global Payment</title>
+  <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #000, #111, #222);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    #card-element {
+      background: #fff;
+      color: #000;
+      padding: 1rem;
+      border-radius: 8px;
+      width: 320px;
+      margin-bottom: 15px;
+    }
+    button {
+      padding: 12px 25px;
+      background-color: #ff4b2b;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background-color: #ff1c00;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <h2>💽 Thuggatunes Global Payment</h2>
+  <div id="card-element"></div>
+  <button id="pay-btn">Pay $20</button>
+
+  <script>
+    const stripe = Stripe("pk_test_51SFihWF4I0lE5UsxnuuPxK6nImVQ2N7sdT2VqbGgC5UPYgN9B70iSqKEl29Ps7uYaCoBrI2gd51euGHw0fsNiBsw005GSM63Ip");
+
+    async function startPayment() {
+      const res = await fetch("http://localhost:5050/create-payment-intent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: 2000, currency: "usd" }),
+      });
+
+      const { clientSecret } = await res.json();
+
+      const elements = stripe.elements();
+      const card = elements.create("card");
+      card.mount("#card-element");
+
+      document.getElementById("pay-btn").addEventListener("click", async () => {
+        const { paymentIntent, error } = await stripe.confirmCardPayment(clientSecret, {
+          payment_method: { card },
+        });
+
+        if (error) {
+          alert("❌ " + error.message);
+        } else if (paymentIntent.status === "succeeded") {
+          alert("✅ Payment Successful — Thuggatunes Worldwide!");
+        }
+      });
+    }
+
+    startPayment();
+  </script>
+</body>
+</html>

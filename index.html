@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thuggatunes Payment Test</title>
+  <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      background: #f7f7f7;
+    }
+    .container {
+      max-width: 400px;
+      margin: auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    button {
+      padding: 10px 20px;
+      background: #556cd6;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #4054a0;
+    }
+    #payment-message {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Thuggatunes Payment Test</h2>
+    <input
+      type="number"
+      id="amount"
+      placeholder="Enter amount in cents"
+      style="width: 100%; padding: 10px; margin-bottom: 15px"
+    />
+    <button id="pay-btn">Pay</button>
+    <div id="payment-message"></div>
+  </div>
+
+  <script>
+    // ✅ Replace with your actual Stripe publishable key
+    const stripe = Stripe(
+      "pk_test_51SFihWF4I0lE5UsxnuuPxK6nImVQ2N7sdT2VqbGgC5UPYgN9B70iSqKEl29Ps7uYaCoBrI2gd51euGHw0fsNiBsw005GSM63Ip"
+    );
+
+    const payBtn = document.getElementById("pay-btn");
+    const paymentMessage = document.getElementById("payment-message");
+
+    payBtn.addEventListener("click", async () => {
+      const amount = document.getElementById("amount").value;
+      if (!amount || amount <= 0) {
+        paymentMessage.textContent = "Please enter a valid amount!";
+        return;
+      }
+
+      paymentMessage.textContent = "Processing payment...";
+
+      try {
+        const response = await fetch("http://localhost:5050/create-payment-intent", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ amount: parseInt(amount), currency: "usd" }),
+        });
+
+        const data = await response.json();
+
+        if (data.error) {
+          paymentMessage.textContent = "Error: " + data.error;
+          return;
+        }
+
+        const clientSecret = data.clientSecret;
+
+        const result = await stripe.confirmCardPayment(clientSecret, {
+          payment_method: {
+            card: { token: "tok_visa" }, // Test card token
+          },
+        });
+
+        if (result.error) {
+          paymentMessage.textContent = "Payment failed: " + result.error.message;
+        } else if (result.paymentIntent.status === "succeeded") {
+          paymentMessage.textContent =
+            "✅ Payment successful! ID: " + result.paymentIntent.id;
+        }
+      } catch (err) {
+        paymentMessage.textContent = "Error: " + err.message;
+      }
+    });
+  </script>
+</body>
+</html>
