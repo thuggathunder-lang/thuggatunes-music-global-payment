@@ -16,6 +16,12 @@ app.use(cors());
 // Routes
 app.use("/api/payments", paymentRoutes);
 
+// Health check
+app.get('/health', (req, res) => {
+  const dbConnected = !!mongoose.connection && mongoose.connection.readyState === 1;
+  res.json({ status: 'ok', dbConnected });
+});
+
 // MongoDB connection (only if MONGO_URI is provided)
 if (process.env.MONGO_URI) {
   mongoose
