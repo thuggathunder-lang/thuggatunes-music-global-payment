@@ -1,32 +1,14 @@
 import http from 'http';
 import fetch from 'node-fetch';
-import { spawn } from 'child_process';
-import path from 'path';
+import { startServer } from '../server.js';
 
-const serverPath = path.resolve(process.cwd(), 'server.js');
-
-let serverProcess;
-
+let server;
 beforeAll(async () => {
-  serverProcess = spawn('node', [serverPath], { stdio: 'inherit' });
-
-  // Wait for the health endpoint to become available (timeout after 5s)
-  const start = Date.now();
-  const timeout = 5000;
-  while (Date.now() - start < timeout) {
-    try {
-      const res = await fetch('http://localhost:5050/health');
-      if (res.ok) return;
-    } catch (e) {
-      // ignore and retry
-    }
-    await new Promise((r) => setTimeout(r, 200));
-  }
-  throw new Error('Server did not start within timeout');
+  server = await startServer(5050);
 }, 20000);
 
-afterAll(() => {
-  if (serverProcess) serverProcess.kill();
+afterAll(async () => {
+  if (server) await new Promise((r) => server.close(r));
 });
 
 test('GET /health returns 200 and JSON', async () => {
