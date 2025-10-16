@@ -16,14 +16,18 @@ app.use(cors());
 // Routes
 app.use("/api/payments", paymentRoutes);
 
-// MongoDB connection
-mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log("✅ MongoDB Connected Successfully"))
-  .catch((err) => console.error("❌ MongoDB Error:", err));
+// MongoDB connection (only when MONGO_URI is provided)
+if (process.env.MONGO_URI) {
+  mongoose
+    .connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    })
+    .then(() => console.log("✅ MongoDB Connected Successfully"))
+    .catch((err) => console.error("❌ MongoDB Error:", err));
+} else {
+  console.warn("⚠️  MONGO_URI is not set. Skipping MongoDB connection. Set MONGO_URI in .env to enable DB.");
+}
 
 // Start server
 app.listen(PORT, () => {
