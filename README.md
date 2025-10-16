@@ -68,29 +68,64 @@ Contributions are welcome — open issues or submit PRs. For direct contact:
 
 ## 🧩 Folder Structure
 
-```# 🎵 Thuggatunes Music Global Payment  
-[![Node.js CI](https://github.com/thuggathunder-lang/thuggatunes-music-global-payment/actions/workflows/nodejs.yml/badge.svg)](https://github.com/thuggathunder-lang/thuggatunes-music-global-payment/actions)  
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)  
-[![Status](https://img.shields.io/badge/status-active-success.svg)]()
+# 🎵 Thuggatunes Music & Global Payment
 
-**Secure Node.js platform powering Thuggatunes’ digital ecosystem — connecting music, payments, and global artist tools in one seamless system.**
+![Thuggatunes Banner](https://raw.githubusercontent.com/thuggathunder-lang/thuggatunes-music-global-payment/main/banner.png)
+
+[![CI](https://github.com/thuggathunder-lang/thuggatunes-music-global-payment/actions/workflows/ci.yml/badge.svg)](https://github.com/thuggathunder-lang/thuggatunes-music-global-payment/actions)
+[![Release](https://github.com/thuggathunder-lang/thuggatunes-music-global-payment/actions/workflows/release.yml/badge.svg)](https://github.com/thuggathunder-lang/thuggatunes-music-global-payment/actions)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+Secure Node.js platform powering **Thuggatunes’ digital ecosystem** — connecting music, payments, and global artist tools in one seamless system.
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Quick start
 
-```bash
-# clone the repo
+Minimal steps to get the project running locally (PowerShell):
+
+```powershell
 git clone https://github.com/thuggathunder-lang/thuggatunes-music-global-payment.git
-
-# move into directory
 cd thuggatunes-music-global-payment
-
-# install dependencies
 npm install
+Copy-Item .env.example .env
+# edit .env and set at least TEST_KEY (see .env.example)
+npm test
+npm start
+```
 
-# create .env file
-cp .env.example .env
+Environment example (add the keys you need):
 
-# start development server
-npm run dev
+```env
+# .env (example)
+NODE_ENV=development
+PORT=3000
+TEST_KEY=replace_me
+LOG_LEVEL=info
+```
+
+## 🧪 Tests
+
+Run the test suite with:
+
+```powershell
+npm test
+```
+
+## 🛠️ What this repo provides
+
+- Small Express-based backend for music + payments
+- dotenv-driven configuration with runtime validation
+- Structured logger and Jest tests
+- Dockerfile and GitHub Actions workflows (CI and Release)
+
+## 💬 Contributing
+
+Contributions welcome. Open an issue first for significant changes.
+
+- Author: Awosiji Wonderful Isaac (Wonder Thunder)
+- Instagram: https://instagram.com/thuggatunes
+
+---
+
+For detailed developer docs and CI/release instructions see the `DOCS/` folder.
