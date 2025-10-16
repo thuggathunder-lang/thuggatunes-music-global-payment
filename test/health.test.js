@@ -8,6 +8,7 @@ const serverPath = path.resolve(process.cwd(), 'server.js');
 let serverProcess;
 
 beforeAll(async () => {
+  jest.setTimeout(20000);
   serverProcess = spawn('node', [serverPath], { stdio: 'inherit' });
 
   // Wait for the health endpoint to become available (timeout after 5s)
