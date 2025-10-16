@@ -18,38 +18,23 @@
 ---
 
 ## 🛠️ Tech Stack
-
-| Layer | Technology |
-|:------|:------------|
-| Backend | Node.js, Express.js |
 | Security | dotenv, JWT Auth, bcrypt |
 | Testing | Jest |
 | Code Quality | ESLint |
 | Database | MongoDB / PostgreSQL (configurable) |
 | Payments | Stripe API, Paystack, Flutterwave |
-| Deployment | Docker / GitHub Actions |
-
 ---
-
 ## 💡 Features
 
 - Secure authentication (JWT)
 - Payment integrations (Stripe, Paystack, Flutterwave)
 - Multi-currency payouts
-- Modular architecture for scaling
-- Configurable via `.env`
-- Automated tests with Jest
-
 ---
 
 ## 🧭 Getting started
 
-Clone, install, copy env, run tests, and start locally:
-
 ```powershell
 git clone https://github.com/thuggathunder-lang/thuggatunes-music-global-payment.git
-cd thuggatunes-music-global-payment
-npm install
 Copy-Item .env.example .env
 npm test
 npm start

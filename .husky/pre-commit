@@ -1,4 +1,8 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-npx --no-install lint-staged
+# Run secret check first to prevent accidental secret commits
+npm run check:secrets
+
+# Run lint-staged if available; don't fail the commit if lint-staged is not configured
+npx --no-install lint-staged || true

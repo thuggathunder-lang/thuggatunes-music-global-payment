@@ -6,7 +6,7 @@
   "scripts": {
   "start": "node server.js",
   "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand --config jest.config.cjs",
-  "check:secrets": "node ./scripts/check-secrets.js",
+  "check:secrets": "node ./scripts/check-secrets.cjs",
   "prepare": "husky install"
   },
   "dependencies": {
