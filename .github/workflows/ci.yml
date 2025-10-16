@@ -2,27 +2,6 @@ name: CI
 
 on:
   push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-      - run: npm ci
-      - run: npm run lint  # Add if you have linting
-      - run: npm test
-      - run: npm run build  # Skip if no build step
-name: CI
-
-on:
-  push:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
@@ -42,5 +21,19 @@ jobs:
           cache: 'npm'
       - name: Install
         run: npm ci
+      - name: Check if lint script exists
+        id: check-lint
+        run: |
+          if grep -q '"lint"' package.json; then echo "exists=true" >> $GITHUB_OUTPUT; else echo "exists=false" >> $GITHUB_OUTPUT; fi
+      - name: Run lint
+        if: steps.check-lint.outputs.exists == 'true'
+        run: npm run lint
+      - name: Check if build script exists
+        id: check-build
+        run: |
+          if grep -q '"build"' package.json; then echo "exists=true" >> $GITHUB_OUTPUT; else echo "exists=false" >> $GITHUB_OUTPUT; fi
       - name: Run tests
         run: npm test
+      - name: Run build
+        if: steps.check-build.outputs.exists == 'true'
+        run: npm run build
