@@ -6,6 +6,8 @@ import paymentRoutes from './paymentRoutes.js';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import logger from './lib/logger.js';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 
 dotenv.config();
 
@@ -13,8 +15,14 @@ const app = express();
 const PORT = process.env.PORT || 5050;
 
 // Middleware
-app.use(express.json());
-app.use(cors());
+app.use(helmet());
+// Restrictive CORS in production; permissive in development
+const corsOptions = process.env.NODE_ENV === 'production' ? { origin: process.env.CORS_ORIGIN || '' } : {};
+app.use(cors(corsOptions));
+// Rate limit (basic) - tune for your environment
+const limiter = rateLimit({ windowMs: 1 * 60 * 1000, max: 100 });
+app.use(limiter);
+app.use(express.json({ limit: process.env.REQUEST_BODY_LIMIT || '100kb' }));
 
 // Routes
 app.use('/api/payments', paymentRoutes);
