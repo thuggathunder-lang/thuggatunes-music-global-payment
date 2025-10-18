@@ -1,6 +1,7 @@
-import express from "express";
-import axios from "axios";
-import dotenv from "dotenv";
+import express from 'express';
+import axios from 'axios';
+import dotenv from 'dotenv';
+import logger from './lib/logger.js';
 dotenv.config();
 
 const router = express.Router();
@@ -24,8 +25,8 @@ router.post("/initiate", async (req, res) => {
 
     res.status(200).json(response.data);
   } catch (error) {
-    console.error("Payment initiation error:", error.response?.data || error.message);
-    res.status(500).json({ message: "Payment initiation failed" });
+    logger.error('Payment initiation error: %o', error.response?.data || error.message);
+    res.status(500).json({ message: 'Payment initiation failed' });
   }
 });
 
