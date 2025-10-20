@@ -5,6 +5,9 @@ const transactionSchema = new mongoose.Schema({
   currency: String,
   paymentIntentId: String,
   status: String,
+  approved: { type: Boolean, default: false },
+  approvedAt: { type: Date },
+  approvedBy: { type: String },
   createdAt: { type: Date, default: Date.now },
 });
 
