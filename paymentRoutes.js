@@ -30,4 +30,41 @@ router.post("/initiate", async (req, res) => {
   }
 });
 
+// @route   POST /api/payments/approve
+// @desc    Approve a payment transaction
+router.post("/approve", async (req, res) => {
+  try {
+    const { transactionId, approvedBy } = req.body;
+
+    if (!transactionId) {
+      return res.status(400).json({ 
+        success: false, 
+        message: "Transaction ID is required" 
+      });
+    }
+
+    // In a real implementation, this would update the transaction in the database
+    // For now, we'll return a success response
+    const approvalData = {
+      transactionId,
+      approved: true,
+      approvedAt: new Date().toISOString(),
+      approvedBy: approvedBy || "system",
+      status: "approved"
+    };
+
+    res.status(200).json({ 
+      success: true, 
+      message: "Payment approved successfully",
+      data: approvalData
+    });
+  } catch (error) {
+    console.error("Payment approval error:", error.message);
+    res.status(500).json({ 
+      success: false, 
+      message: "Payment approval failed" 
+    });
+  }
+});
+
 export default router;

@@ -1,4 +1,4 @@
-module.exports = [
+export default [
   // files/ignores configuration
   {
     ignores: ['node_modules', 'coverage'],
