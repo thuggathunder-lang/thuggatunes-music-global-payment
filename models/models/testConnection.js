@@ -1,27 +1,29 @@
-// testConnection.js
-const mongoose = require("mongoose");
+import mongoose from 'mongoose';
+import logger from '../../lib/logger.js';
+import Stripe from 'stripe';
+
 // Load Stripe key from environment. Do NOT hard-code secrets in source.
 const stripeKey = process.env.STRIPE_KEY || process.env.STRIPE_TEST_KEY || '';
 if (!stripeKey) {
-  console.warn('WARN: STRIPE_KEY not set; Stripe calls will fail in this test file');
+  logger.warn('WARN: STRIPE_KEY not set; Stripe calls will fail in this test file');
 }
-const stripe = require('stripe')(stripeKey);
+const stripe = Stripe(stripeKey);
 
 // ✅ MongoDB connection (leave this as is if you’re running MongoDB locally)
-const MONGO_URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/thuggatunes_payments";
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/thuggatunes_payments';
 
 async function testConnections() {
   try {
     // Connect to MongoDB
     await mongoose.connect(MONGO_URI);
-    console.log("✅ MongoDB connected successfully!");
+    logger.info('✅ MongoDB connected successfully!');
 
     // Test Stripe connection
     const balance = await stripe.balance.retrieve();
-    console.log("✅ Stripe connection successful!");
-    console.log("💰 Balance Info:", balance);
+    logger.info('✅ Stripe connection successful!');
+    logger.info('💰 Balance Info: %o', balance);
   } catch (err) {
-    console.error("❌ Connection test failed:", err);
+    logger.error('❌ Connection test failed: %o', err && err.stack ? err.stack : err);
   } finally {
     mongoose.connection.close();
   }
