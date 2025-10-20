@@ -1,14 +1,14 @@
-// db.js
-const mongoose = require("mongoose");
+import mongoose from 'mongoose';
+import logger from '../../lib/logger.js';
 
-const connectDB = async () => {
+const connectDB = async (uri = 'mongodb://localhost:27017/thuggatunes_payments') => {
   try {
-    const conn = await mongoose.connect("mongodb://localhost:27017/thuggatunes_payments");
-    console.log(`✅ MongoDB connected: ${conn.connection.host}`);
+    const conn = await mongoose.connect(uri, {});
+    logger.info('✅ MongoDB connected: %s', conn.connection.host);
   } catch (error) {
-    console.error("❌ MongoDB connection error:", error.message);
+    logger.error('❌ MongoDB connection error: %s', error && error.message ? error.message : error);
     process.exit(1);
   }
 };
 
-module.exports = connectDB;
+export default connectDB;
